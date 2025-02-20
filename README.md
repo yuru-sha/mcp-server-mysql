@@ -1,4 +1,5 @@
 # mcp-server-mysql
+[![smithery badge](https://smithery.ai/badge/@yuru-sha/mcp-server-mysql)](https://smithery.ai/server/@yuru-sha/mcp-server-mysql)
 
 Model Context Protocol Server for MySQL databases. This server enables LLMs to inspect database schemas and execute read-only queries.
 
@@ -30,10 +31,10 @@ npm install @modelcontextprotocol/server-mysql
 
 ### Installing via Smithery
 
-To install MySQL Database Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@yuru-sha/mcp-mysql):
+To install MySQL Database Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@yuru-sha/mcp-server-mysql):
 
 ```bash
-npx -y @smithery/cli install @yuru-sha/mcp-mysql --client claude
+npx -y @smithery/cli install @yuru-sha/mcp-server-mysql --client claude
 ```
 
 ## Usage
