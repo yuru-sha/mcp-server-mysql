@@ -25,7 +25,7 @@ docker run -i --rm mcp/mysql mysql://host:port/dbname
 ### Using NPM
 
 ```bash
-npm install @modelcontextprotocol/mysql
+npm install @modelcontextprotocol/server-mysql
 ```
 
 ### Installing via Smithery

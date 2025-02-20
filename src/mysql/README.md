@@ -54,7 +54,7 @@ To use this server with the Claude Desktop app, add the following configuration 
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/mysql",
+        "@modelcontextprotocol/server-mysql",
         "mysql://localhost/mydb"
       ]
     }
