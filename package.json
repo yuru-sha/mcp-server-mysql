@@ -19,7 +19,7 @@
     "link-all": "npm link --workspaces",
     "test": "jest",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
     "@modelcontextprotocol/server-mysql": "^0.1.0"

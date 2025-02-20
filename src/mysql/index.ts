@@ -20,7 +20,7 @@ const server = new Server(
       resources: {},
       tools: {},
     },
-  },
+  }
 );
 
 const args = process.argv.slice(2);
@@ -43,7 +43,7 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.query(
-      "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()",
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()"
     );
     return {
       resources: (rows as any[]).map((row) => ({
@@ -74,7 +74,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     await connection.beginTransaction();
     const [rows] = await connection.query(
       "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ? AND table_schema = DATABASE()",
-      [tableName],
+      [tableName]
     );
 
     return {
@@ -137,4 +137,4 @@ async function runServer() {
   await server.connect(transport);
 }
 
-runServer().catch(console.error); 
+runServer().catch(console.error);
