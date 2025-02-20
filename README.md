@@ -28,6 +28,14 @@ docker run -i --rm mcp/mysql mysql://host:port/dbname
 npm install @modelcontextprotocol/mysql
 ```
 
+### Installing via Smithery
+
+To install MySQL Database Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@yuru-sha/mcp-mysql):
+
+```bash
+npx -y @smithery/cli install @yuru-sha/mcp-mysql --client claude
+```
+
 ## Usage
 
 ### With Claude Desktop
@@ -92,4 +100,3 @@ This server enforces read-only access to protect your database. All queries are 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
