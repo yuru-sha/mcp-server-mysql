@@ -1,11 +1,11 @@
 {
-  "name": "@modelcontextprotocol/mysql",
+  "name": "@modelcontextprotocol/server-mysql",
   "version": "0.1.0",
   "description": "MCP server for interacting with MySQL databases",
   "license": "MIT",
-  "author": "Anthropic, PBC (https://anthropic.com)",
-  "homepage": "https://modelcontextprotocol.io",
-  "bugs": "https://github.com/yuru-sha/mcp-mysql/issues",
+  "author": "yuru-sha",
+  "homepage": "https://github.com/yuru-sha/",
+  "bugs": "https://github.com/yuru-sha/mcp-server-mysql/issues",
   "type": "module",
   "bin": {
     "mcp-server-mysql": "dist/index.js"

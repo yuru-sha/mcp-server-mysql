@@ -1,6 +1,4 @@
-# mcp-mysql
-
-[![smithery badge](https://smithery.ai/badge/@yuru-sha/mcp-mysql)](https://smithery.ai/server/@yuru-sha/mcp-mysql)
+# mcp-server-mysql
 
 Model Context Protocol Server for MySQL databases. This server enables LLMs to inspect database schemas and execute read-only queries.
 
