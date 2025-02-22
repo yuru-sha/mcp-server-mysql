@@ -63,6 +63,14 @@ claude_desktop_config.jsonに以下の設定を追加してください：
 
 Note：macOSでDockerを使用する場合、MySQLサーバーがホストネットワーク上で動作している場合は、host.docker.internalを使用してください。
 
+### 接続URLの形式
+
+```
+mysql://[user][:password]@host[:port]/database
+```
+
+/databaseを実際のデータベース名に置き換えてください。
+
 ## 開発
 
 ```bash

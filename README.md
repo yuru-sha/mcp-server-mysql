@@ -69,6 +69,8 @@ Note: When using Docker on macOS, use `host.docker.internal` if the MySQL server
 mysql://[user][:password]@host[:port]/database
 ```
 
+Replace `/database` with your database name.
+
 ## Development
 
 ```bash
