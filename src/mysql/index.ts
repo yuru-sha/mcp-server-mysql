@@ -12,7 +12,7 @@ import mysql from "mysql2/promise";
 
 const server = new Server(
   {
-    name: "example-servers/mysql",
+    name: "mcp-server-mysql",
     version: "0.1.0",
   },
   {
@@ -132,7 +132,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   throw new Error(`Unknown tool: ${request.params.name}`);
 });
 
-async function runServer() {
+async function runServer(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

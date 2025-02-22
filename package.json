@@ -1,41 +1,39 @@
 {
-  "name": "@modelcontextprotocol/servers",
-  "private": true,
+  "name": "@modelcontextprotocol/server-mysql",
   "version": "0.1.0",
-  "description": "Model Context Protocol Server for MySQL databases",
+  "description": "MCP server for interacting with MySQL databases",
   "license": "MIT",
   "author": "yuru-sha",
   "homepage": "https://github.com/yuru-sha/",
   "bugs": "https://github.com/yuru-sha/mcp-server-mysql/issues",
   "type": "module",
-  "workspaces": [
-    "src/*"
+  "bin": {
+    "mcp-server-mysql": "./dist/index.js"
+  },
+  "files": [
+    "dist"
   ],
-  "files": [],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "watch": "npm run watch --workspaces",
-    "publish-all": "npm publish --workspaces --access public",
-    "link-all": "npm link --workspaces",
-    "test": "jest",
+    "build": "tsc && shx chmod +x dist/*.js",
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
-    "@modelcontextprotocol/server-mysql": "^0.1.0"
+    "@modelcontextprotocol/sdk": "1.0.1",
+    "mysql2": "^3.9.4"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.0",
+    "@eslint/js": "^8.56.0",
+    "@modelcontextprotocol/inspector": "0.4.1",
+    "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
-    "eslint": "^8.35.0",
-    "jest": "^29.5.0",
+    "globals": "^13.23.0",
     "prettier": "^2.8.4",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=16.0.0"
+    "shx": "^0.3.4",
+    "sqlite3": "^5.1.6",
+    "typescript": "^5.6.2",
+    "vitest": "^3.0.6"
   }
 }

@@ -1,4 +1,5 @@
 # mcp-server-mysql
+[![CI Status](https://github.com/yuru-sha/mcp-server-mysql/actions/workflows/ci.yml/badge.svg)](https://github.com/yuru-sha/mcp-server-mysql/actions)
 [![smithery badge](https://smithery.ai/badge/@yuru-sha/mcp-server-mysql)](https://smithery.ai/server/@yuru-sha/mcp-server-mysql)
 
 Model Context Protocol Server for MySQL databases. This server enables LLMs to inspect database schemas and execute read-only queries.
@@ -77,12 +78,6 @@ make setup
 # Build the project
 make build
 
-# Run tests
-make test
-
-# Development mode with watch
-make watch
-
 # Format code
 make format
 
@@ -97,6 +92,8 @@ MIT License - see LICENSE file for details.
 ## Security
 
 This server enforces read-only access to protect your database. All queries are executed within READ ONLY transactions.
+
+For enhanced security, we recommend creating a read-only user.
 
 ## Contributing
 
