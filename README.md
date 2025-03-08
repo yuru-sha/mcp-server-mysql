@@ -50,10 +50,10 @@ Add the following configuration to your `claude_desktop_config.json`:
     "mysql": {
       "command": "docker",
       "args": [
-        "run", 
-        "-i", 
-        "--rm", 
-        "mcp/mysql", 
+        "run",
+        "-i",
+        "--rm",
+        "mcp/mysql",
         "mysql://host:port/dbname"
       ]
     }
@@ -89,7 +89,7 @@ make lint
 
 ## License
 
-MIT License - see LICENSE file for details.
+This project is released under the [MIT License](LICENSE).
 
 ## Security
 
