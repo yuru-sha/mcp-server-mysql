@@ -112,6 +112,20 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === "query") {
     const sql = request.params.arguments?.sql as string;
 
+    // DDLクエリを検出して実行を防ぐ
+    const ddlKeywords = [
+      "CREATE", "ALTER", "DROP", "TRUNCATE", "RENAME",
+      "GRANT", "REVOKE", "SET PASSWORD", "LOCK TABLES", "UNLOCK TABLES"
+    ];
+    const upperSql = sql.toUpperCase();
+    const containsDDL = ddlKeywords.some(keyword =>
+      upperSql.includes(keyword + " ") || upperSql.startsWith(keyword + " ")
+    );
+
+    if (containsDDL) {
+      throw new Error("DDL queries are not allowed for security reasons");
+    }
+
     const connection = await pool.getConnection();
     try {
       await connection.query("SET TRANSACTION READ ONLY");
