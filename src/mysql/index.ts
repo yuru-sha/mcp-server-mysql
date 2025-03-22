@@ -13,7 +13,7 @@ import mysql from "mysql2/promise";
 const server = new Server(
   {
     name: "mcp-server-mysql",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     capabilities: {
