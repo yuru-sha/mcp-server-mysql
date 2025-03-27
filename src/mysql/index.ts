@@ -8,12 +8,12 @@ import {
   ListToolsRequestSchema,
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import mysql from "mysql2/promise";
+import { createPool, PoolConnection } from "mysql2/promise";
 
 const server = new Server(
   {
     name: "mcp-server-mysql",
-    version: "0.1.1",
+    version: "0.1.2",
   },
   {
     capabilities: {
@@ -35,16 +35,60 @@ const resourceBaseUrl = new URL(databaseUrl);
 resourceBaseUrl.protocol = "mysql:";
 resourceBaseUrl.password = "";
 
-const pool = mysql.createPool(databaseUrl);
+const pool = createPool({
+  uri: databaseUrl,
+});
 
 const SCHEMA_PATH = "schema";
+
+// 禁止されたSQLキーワードのリスト
+const FORBIDDEN_KEYWORDS = [
+  // DDL
+  "CREATE", "ALTER", "DROP", "TRUNCATE", "RENAME",
+  // DCL
+  "GRANT", "REVOKE",
+  // TCL
+  "BEGIN", "START TRANSACTION", "COMMIT", "ROLLBACK", "SAVEPOINT",
+  // DML
+  "INSERT", "UPDATE", "DELETE", "MERGE", "UPSERT",
+  // その他の危険な操作
+  "SET", "RESET", "LOCK", "UNLOCK", "VACUUM", "CLUSTER",
+  "REINDEX", "ANALYZE", "EXPLAIN", "EXECUTE", "PREPARE",
+  "DEALLOCATE", "DECLARE", "FETCH", "MOVE", "CLOSE",
+  "LISTEN", "NOTIFY", "LOAD", "COPY"
+];
+
+// トランザクションを開始し、READ ONLYモードを設定する関数
+async function beginReadOnlyTransaction(connection: PoolConnection): Promise<void> {
+  await connection.beginTransaction();
+  await connection.query('SET SESSION TRANSACTION READ ONLY');
+  await connection.query('SET SESSION max_execution_time = 5000'); // 5秒でタイムアウト
+}
+
+// SQLクエリが安全かどうかをチェックする関数
+function isQuerySafe(sql: string): boolean {
+  const normalizedSql = sql.toUpperCase().replace(/\s+/g, ' ').trim();
+
+  // SELECTで始まることを確認
+  if (!normalizedSql.startsWith('SELECT ')) {
+    return false;
+  }
+
+  // 禁止キーワードのチェック
+  return !FORBIDDEN_KEYWORDS.some(keyword => {
+    const pattern = new RegExp(`(^|\\s)${keyword}(\\s|$)`);
+    return pattern.test(normalizedSql);
+  });
+}
 
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
   const connection = await pool.getConnection();
   try {
+    await beginReadOnlyTransaction(connection);
     const [rows] = await connection.query(
       "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()"
     );
+    await connection.commit();
     return {
       resources: (rows as any[]).map((row) => ({
         uri: new URL(`${row.TABLE_NAME}/${SCHEMA_PATH}`, resourceBaseUrl).href,
@@ -52,6 +96,9 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
         name: `"${row.TABLE_NAME}" database schema`,
       })),
     };
+  } catch (error) {
+    await connection.rollback();
+    throw error;
   } finally {
     connection.release();
   }
@@ -70,13 +117,12 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 
   const connection = await pool.getConnection();
   try {
-    await connection.query("SET TRANSACTION READ ONLY");
-    await connection.beginTransaction();
+    await beginReadOnlyTransaction(connection);
     const [rows] = await connection.query(
       "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = ? AND table_schema = DATABASE()",
       [tableName]
     );
-
+    await connection.commit();
     return {
       contents: [
         {
@@ -86,6 +132,9 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
         },
       ],
     };
+  } catch (error) {
+    await connection.rollback();
+    throw error;
   } finally {
     connection.release();
   }
@@ -112,24 +161,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === "query") {
     const sql = request.params.arguments?.sql as string;
 
-    // DDLクエリを検出して実行を防ぐ
-    const ddlKeywords = [
-      "CREATE", "ALTER", "DROP", "TRUNCATE", "RENAME",
-      "GRANT", "REVOKE", "SET PASSWORD", "LOCK TABLES", "UNLOCK TABLES"
-    ];
-    const upperSql = sql.toUpperCase();
-    const containsDDL = ddlKeywords.some(keyword =>
-      upperSql.includes(keyword + " ") || upperSql.startsWith(keyword + " ")
-    );
-
-    if (containsDDL) {
-      throw new Error("DDL queries are not allowed for security reasons");
+    if (!isQuerySafe(sql)) {
+      throw new Error("Only simple SELECT queries are allowed for security reasons");
     }
 
     const connection = await pool.getConnection();
     try {
-      await connection.query("SET TRANSACTION READ ONLY");
-      await connection.beginTransaction();
+      await beginReadOnlyTransaction(connection);
       const [rows] = await connection.query(sql);
       await connection.commit();
       return {
@@ -150,5 +188,9 @@ async function runServer(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
+
+process.on('exit', () => {
+  pool.end();
+});
 
 runServer().catch(console.error);

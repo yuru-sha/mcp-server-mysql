@@ -1,6 +1,6 @@
 {
   "name": "@modelcontextprotocol/server-mysql",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for interacting with MySQL databases",
   "license": "MIT",
   "author": "yuru-sha",
