@@ -24,12 +24,6 @@ make docker
 docker run -i --rm mcp/mysql mysql://host:port/dbname
 ```
 
-### Using NPM
-
-```bash
-npm install @modelcontextprotocol/server-mysql
-```
-
 ### Installing via Smithery
 
 To install MySQL Database Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@yuru-sha/mcp-server-mysql):
