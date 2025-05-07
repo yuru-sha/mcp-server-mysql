@@ -1,0 +1,21 @@
+# Source code and build-related
+/node_modules
+/src
+tsconfig.json
+
+# Configuration and definition files
+Dockerfile
+Makefile
+eslint.config.js
+smithery.yaml
+
+# Version control and project metadata
+.gitignore
+.github/
+.specstory/
+
+# Editor/IDE specific files
+.cursorignore
+.codeiumignore
+.cursorrules
+.windsurfrules
