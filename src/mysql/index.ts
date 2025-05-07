@@ -13,7 +13,7 @@ import { createPool, PoolConnection } from "mysql2/promise";
 const server = new Server(
   {
     name: "mcp-server-mysql",
-    version: "0.1.2",
+    version: "0.1.3",
   },
   {
     capabilities: {
