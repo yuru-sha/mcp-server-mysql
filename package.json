@@ -28,7 +28,7 @@
     "@modelcontextprotocol/inspector": "2.13.0",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.54.0",
+    "@typescript-eslint/parser": "^8.72.1",
     "globals": "^13.23.0",
     "prettier": "^2.8.4",
     "shx": "^0.4.0",
